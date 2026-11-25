@@ -1,0 +1,110 @@
+[
+  {
+    "file": "chrome-ring.mp4",
+    "type": "video",
+    "poster": "chrome-ring.jpg",
+    "width": 640,
+    "height": 800,
+    "category": "3D",
+    "description": "A liquid-chrome ring of uneven thickness floats above a seamless apricot studio backdrop beside a matte apricot sphere and two small chrome balls; its mirror surface reflects cool blue-grey tones on top and warm peach from the floor, with crisp strip-light highlights and a soft shadow beneath. Ripples travel around the ring as it gently sways side to side and bobs, its shadow breathing on the floor."
+  },
+  {
+    "file": "kinetic-type.mp4",
+    "type": "video",
+    "poster": "kinetic-type.jpg",
+    "width": 800,
+    "height": 800,
+    "category": "Typography",
+    "description": "Bold cream wide-sans lettering reading 'EVERYTHING' and 'FLOWS' in alternating rows on an ultramarine background, separated by small orange dots, with light film grain. The rows scroll left and right in opposite directions while their heights stretch and squash in a rolling accordion wave."
+  },
+  {
+    "file": "ink-bloom.mp4",
+    "type": "video",
+    "poster": "ink-bloom.jpg",
+    "width": 450,
+    "height": 800,
+    "category": "VFX",
+    "description": "Blue and crimson ink pour from two thin streams into a backlit tank of clear water, twisting into curling vortices and marbled lilac clouds against a warm white background with drifting specks. The streams wobble while the plumes continuously roll, billow and sink."
+  },
+  {
+    "file": "ocean-dusk.mp4",
+    "type": "video",
+    "poster": "ocean-dusk.jpg",
+    "width": 800,
+    "height": 450,
+    "category": "Editing",
+    "description": "A letterboxed 2.39:1 shot of open ocean at golden hour: a low sun over a hazy horizon, a thin band of clouds, a dark headland on the left and a glittering sun path on the water, graded teal-orange with film grain, halation and a faint anamorphic streak. Swells and small ripples roll toward the camera, sparkling as they cross the sun path."
+  },
+  {
+    "file": "amber-perfume.mp4",
+    "type": "video",
+    "poster": "amber-perfume.jpg",
+    "width": 640,
+    "height": 800,
+    "category": "Product",
+    "description": "A rectangular glass perfume bottle filled with amber liquid and topped with a brushed-gold cap stands on a travertine pedestal beside a sage ceramic sphere, against a seamless sage-green backdrop dappled with soft leaf shadows. The bottle turns slowly as if on a turntable while the leaf shadows sway, and its amber-tinted shadow glows on the stone."
+  },
+  {
+    "file": "bauhaus-grid.mp4",
+    "type": "video",
+    "poster": "bauhaus-grid.jpg",
+    "width": 640,
+    "height": 800,
+    "category": "Motion Graphics",
+    "description": "A 4-by-5 grid of flat Bauhaus-style tiles in navy, vermilion, mustard, teal, blush and cream: quarter circles, semicircles, diamonds, half-ring arcs, striped bars and dot clusters on paper-textured squares. Each tile performs a staggered, eased move in a diagonal wave, with shapes snapping through quarter turns, flipping, sliding and pulsing, with motion blur."
+  },
+  {
+    "file": "glass-torus.mp4",
+    "type": "video",
+    "poster": "glass-torus.jpg",
+    "width": 800,
+    "height": 800,
+    "category": "3D",
+    "description": "A chunky iridescent glass torus stands on rippled warm sand beside a terracotta cylinder and a cream sphere, lit by a low sun from behind; the glass shows pastel thin-film colours and prismatic fringing and casts a long ring-shaped shadow with a bright caustic line. The torus turns slowly on its vertical axis, swinging its shadow and caustic across the sand as the iridescent sheen shifts."
+  },
+  {
+    "file": "particle-drift.mp4",
+    "type": "video",
+    "poster": "particle-drift.jpg",
+    "width": 800,
+    "height": 450,
+    "category": "Particles",
+    "description": "Three luminous ribbons of thin light trails in gold, coral, ivory, rose and mint flow across a deep midnight-blue background with a soft glow, like a long-exposure photograph. Thousands of particles stream left to right along gently meandering curves, each fading in and out along its path."
+  },
+  {
+    "file": "silk-flow.mp4",
+    "type": "video",
+    "poster": "silk-flow.jpg",
+    "width": 600,
+    "height": 800,
+    "category": "Abstract",
+    "description": "Top-down close-up of deep teal satin folds with soft champagne highlights and copper glints in the creases, like shot silk, with a moody vignette and fine grain. The folds roll slowly across the frame as if a breeze is moving under the fabric."
+  },
+  {
+    "file": "sun-courtyard.mp4",
+    "type": "video",
+    "poster": "sun-courtyard.jpg",
+    "width": 800,
+    "height": 450,
+    "category": "Architecture",
+    "description": "A minimal Mediterranean courtyard of salmon-pink stucco under a clear blue sky: a staircase climbs the back wall to a landing, two arched openings and a small arched window frame the sky, a side wall has a round porthole, and a terracotta planter sits on large sandstone floor tiles. Hard sunlight casts a sharp diagonal shadow that sweeps slowly back and forth across the walls and floor, like a time-lapse of the sun."
+  },
+  {
+    "file": "contour-poster.mp4",
+    "type": "video",
+    "poster": "contour-poster.jpg",
+    "width": 600,
+    "height": 800,
+    "category": "Illustration",
+    "description": "A two-colour risograph poster titled 'Elevation Study' on warm cream paper: a mountain massif drawn in orange contour lines, with heavier index lines every fifth, over a blue 45-degree halftone hillshade, slightly misregistered, with small blue captions and a scale bar. The contour lines rise and fall like a slow tide over the still halftone relief."
+  },
+  {
+    "file": "phyllotaxis.mp4",
+    "type": "video",
+    "poster": "phyllotaxis.jpg",
+    "width": 800,
+    "height": 800,
+    "category": "Generative",
+    "description": "A sunflower-like phyllotaxis spiral of about 1,500 dots on warm cream paper, coloured in bands of teal, terracotta, mustard, rose and navy. Waves of dot size ripple outward from the centre with a three-lobed twist, so the spiral arms pulse and shimmer."
+  }
+]
