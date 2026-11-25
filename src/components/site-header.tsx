@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, type ReactNode } from "react";
 import { Logo } from "@/components/ui/logo";
 import { SearchDialog } from "@/components/search-dialog";
@@ -37,7 +38,12 @@ export function SiteHeader({ children }: { children: ReactNode }) {
         <div className="flex flex-1 justify-end md:justify-center">
           <SearchDialog />
         </div>
-        <div className="flex items-center gap-2">{children}</div>
+        <div className="flex items-center gap-2">
+          <Link href="/about" className="btn btn-sm hidden text-ink-2 hover:text-ink lg:inline-flex">
+            About us
+          </Link>
+          {children}
+        </div>
       </div>
     </header>
   );

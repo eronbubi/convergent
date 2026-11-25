@@ -4,7 +4,11 @@ import { Squiggle } from "@/components/sketch/doodles";
 import { isSupabaseConfigured } from "@/lib/config";
 import { TAGS } from "@/lib/tags";
 
-const columns = [
+const CONVERGENT_URL = "https://convergent-web.vercel.app";
+
+type FooterLink = { href: string; label: string; external?: boolean };
+
+const columns: { title: string; links: FooterLink[] }[] = [
   {
     title: "Browse",
     links: [
@@ -26,6 +30,13 @@ const columns = [
       { href: "/new", label: "New post" },
     ],
   },
+  {
+    title: "Claudemotion",
+    links: [
+      { href: "/about", label: "About us" },
+      { href: CONVERGENT_URL, label: "Convergent", external: true },
+    ],
+  },
 ];
 
 export function SiteFooter() {
@@ -33,7 +44,7 @@ export function SiteFooter() {
     <footer className="relative mt-32 overflow-hidden bg-night text-paper">
       <div className="mx-auto max-w-[1440px] px-4 pt-20 sm:px-6 lg:px-10">
         <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-5">
+          <div className="md:col-span-4">
             <LogoMark className="size-10 text-paper" />
             <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-paper/60">
               Motion pieces made with code, posted with a still, the prompt, the model that wrote the code and the
@@ -47,9 +58,20 @@ export function SiteFooter() {
               <ul className="mt-4 space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.href}>
-                    <Link href={l.href} className="link-underline text-[15px] text-paper/80 hover:text-paper">
-                      {l.label}
-                    </Link>
+                    {l.external ? (
+                      <a
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener"
+                        className="link-underline text-[15px] text-paper/80 hover:text-paper"
+                      >
+                        {l.label} ↗
+                      </a>
+                    ) : (
+                      <Link href={l.href} className="link-underline text-[15px] text-paper/80 hover:text-paper">
+                        {l.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -70,7 +92,12 @@ export function SiteFooter() {
 
       <div className="relative border-t border-night-line">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-4 py-6 text-[13px] text-paper/45 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-10">
-          <p>© {2026} Claudemotion</p>
+          <p>
+            © {2026} Claudemotion · A project by{" "}
+            <a href={CONVERGENT_URL} target="_blank" rel="noopener" className="text-paper/70 underline-offset-4 hover:text-paper hover:underline">
+              Convergent
+            </a>
+          </p>
           {!isSupabaseConfigured && <p>Showing demo posts. Accounts and uploads switch on once Supabase is connected.</p>}
         </div>
       </div>
