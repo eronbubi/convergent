@@ -20,6 +20,8 @@ type DrawProps = {
   trigger?: "view" | "mount";
   /** Shown to assistive tech; decorative drawings stay hidden when omitted. */
   label?: string;
+  /** Stretch to the box instead of keeping the aspect ratio (for flat strokes like underlines). */
+  stretch?: boolean;
 };
 
 /** Hand-drawn strokes that draw themselves, one after another. */
@@ -34,6 +36,7 @@ export function Draw({
   overlap = 0.35,
   trigger = "view",
   label,
+  stretch = false,
 }: DrawProps) {
   const reduce = useReducedMotion();
   const step = duration * (1 - overlap);
@@ -41,6 +44,7 @@ export function Draw({
   return (
     <motion.svg
       viewBox={viewBox}
+      preserveAspectRatio={stretch ? "none" : undefined}
       fill="none"
       className={className}
       style={{ overflow: "visible", ...style }}

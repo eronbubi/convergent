@@ -32,9 +32,6 @@ export function PromptToImage({ className, delay = 0.2 }: { className?: string; 
     ...sketchCurve(scribble(40, 354, 140, 3), 8, { roughness: 0.6 }),
     ...sketchLine(194, 340, 194, 368, 9, { roughness: 0.4 }),
     ...sketchArrow([246, 292], [196, 234], 26, 10, 13),
-    ...sketchLine(392, 30, 404, 18, 11),
-    ...sketchLine(398, 48, 414, 46, 12),
-    ...sketchLine(380, 22, 382, 6, 13),
   ];
   return (
     <div className={`relative ${className ?? ""}`}>

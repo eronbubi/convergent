@@ -42,7 +42,8 @@ export function Underline({ className, delay = 0, trigger, strokeWidth = 3, seed
       strokeWidth={strokeWidth}
       duration={0.6}
       overlap={0.2}
-      style={{ width: "100%", height: "auto" }}
+      stretch
+      style={{ width: "100%", height: "0.16em" }}
     />
   );
 }
