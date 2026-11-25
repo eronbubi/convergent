@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Claudemotion — intro</title>
+<style>
+  @font-face { font-family: "Geist"; src: url(__FONT__) format("woff2"); font-weight: 100 900; font-display: block; }
+  html, body { margin: 0; background: #ece9e4; }
+  #stage {
+    position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #ece9e4;
+    font-family: "Geist", sans-serif; color: #111; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
+  }
+  #world { position: absolute; left: 540px; top: 900px; width: 0; height: 0; transform-origin: 0 0; }
+  #shape {
+    position: absolute; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(30, 25, 15, 0.05), 0 28px 56px -28px rgba(40, 30, 18, 0.32);
+  }
+  .layer { position: absolute; visibility: hidden; }
+  .abs { position: absolute; }
+  .row { display: flex; align-items: center; }
+  .tnum { font-feature-settings: "tnum" 1; }
+  .gray { color: #6e6a64; }
+  svg.ico { display: block; overflow: visible; }
+  #cursor { position: absolute; left: 0; top: 0; width: 60px; height: 76px; transform-origin: 6px 4px; overflow: visible; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="world">
+    <div id="shape">
+
+      <!-- 1 · Button -->
+      <div class="layer" id="l-button" style="width:400px;height:96px">
+        <div class="abs row" style="inset:0;justify-content:center;gap:14px;color:#fff;font-size:32px;font-weight:500">
+          <span>Browse the feed</span>
+          <span id="btn-arrow" data-icon="arrow" data-size="28"></span>
+        </div>
+      </div>
+
+      <!-- 2 · Command palette -->
+      <div class="layer" id="l-palette" style="width:620px;height:188px">
+        <div class="abs row" style="left:30px;top:0;height:100px;gap:18px">
+          <span data-icon="search" data-size="30" data-color="#111"></span>
+          <span id="pal-text" style="font-size:30px;font-weight:450;white-space:pre"></span><span id="pal-caret" class="abs" style="width:3px;height:36px;background:#111;border-radius:2px"></span>
+          <span id="pal-ph" class="gray" style="font-size:30px">Search posts, people, tags</span>
+        </div>
+        <div class="abs row" style="right:28px;top:31px;height:38px;padding:0 10px;border:1.5px solid #e2ded7;border-radius:10px;font-size:20px;font-weight:500;color:#6e6a64">⌘K</div>
+        <div id="pal-row" class="abs" style="left:0;right:0;top:100px;height:88px">
+          <div class="abs" style="left:0;right:0;top:0;height:1.5px;background:#ece9e4"></div>
+          <div id="pal-hl" class="abs" style="left:10px;right:10px;top:10px;bottom:10px;border-radius:16px;background:#f1eee9"></div>
+          <div class="abs row" style="left:22px;right:24px;top:0;bottom:0;gap:18px">
+            <canvas id="pal-thumb" width="120" height="120" style="width:56px;height:56px;border-radius:12px"></canvas>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:26px;font-weight:550;line-height:1.15">Liquid chrome ring</div>
+              <div class="gray" style="font-size:19px;margin-top:3px">@jonas.feld · Claude Opus 5.5</div>
+            </div>
+            <span class="gray" style="font-size:24px">↵</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 · Tabs -->
+      <div class="layer" id="l-tabs" style="width:620px;height:92px">
+        <div id="tab-ind" class="abs" style="top:8px;height:76px;border-radius:38px;background:#111"></div>
+        <div class="abs row tabset" style="inset:0;color:#6e6a64">
+          <span>For you</span><span>Latest</span><span>Most copied</span>
+        </div>
+        <div id="tab-on" class="abs row tabset" style="inset:0;color:#fff">
+          <span>For you</span><span>Latest</span><span>Most copied</span>
+        </div>
+      </div>
+
+      <!-- 4 · Clip card -->
+      <div class="layer" id="l-card" style="width:460px;height:600px">
+        <canvas id="card-media" class="abs" width="864" height="900" style="left:14px;top:14px;width:432px;height:450px;border-radius:20px;background:#ddd"></canvas>
+        <div id="card-badge" class="abs row" style="left:30px;top:404px;height:40px;padding:0 16px 0 12px;gap:8px;border-radius:20px;background:rgba(17,17,17,0.58);color:#fff;font-size:19px;font-weight:500">
+          <span data-icon="play" data-size="16" data-color="#fff"></span>Clip
+        </div>
+        <div class="abs" style="left:30px;right:30px;top:486px">
+          <div class="row" style="justify-content:space-between">
+            <div style="font-size:30px;font-weight:550;letter-spacing:-0.02em">Liquid chrome ring</div>
+            <div class="row gray tnum" style="gap:8px;font-size:21px"><span data-icon="copy" data-size="20" data-color="#6e6a64"></span>1,204</div>
+          </div>
+          <div class="gray" style="font-size:21px;margin-top:8px">@jonas.feld · Claude Opus 5.5</div>
+        </div>
+      </div>
+
+      <!-- 5 · Copy button -->
+      <div class="layer" id="l-copy" style="width:340px;height:96px">
+        <div id="copy-a" class="abs row" style="inset:0;justify-content:center;gap:14px;color:#fff;font-size:31px;font-weight:500">
+          <span data-icon="copy" data-size="28" data-color="#fff"></span>Copy prompt
+        </div>
+        <div id="copy-b" class="abs row" style="inset:0;justify-content:center;gap:14px;color:#fff;font-size:31px;font-weight:500">
+          <span data-icon="check" data-size="28" data-color="#fff"></span>Copied
+        </div>
+      </div>
+
+      <!-- 6 · Toast -->
+      <div class="layer" id="l-toast" style="width:520px;height:100px">
+        <div class="abs row" style="left:24px;top:0;bottom:0;gap:18px;color:#fff;font-size:29px;font-weight:500">
+          <span class="row" style="width:52px;height:52px;border-radius:26px;background:#c6613f;justify-content:center">
+            <span data-icon="check" data-size="26" data-color="#fff"></span>
+          </span>
+          Prompt copied
+        </div>
+        <div class="abs row tnum" style="right:30px;top:0;bottom:0;gap:10px;color:rgba(255,255,255,0.78);font-size:29px;font-weight:500">
+          <span data-icon="copy" data-size="24" data-color="rgba(255,255,255,0.78)"></span>
+          <span style="white-space:nowrap">1,20<span style="position:relative;display:inline-block;width:0.6em;height:36px;overflow:hidden;vertical-align:-8px">
+            <span id="toast-digits" class="abs" style="left:0;top:0;line-height:36px"><span style="display:block">4</span><span style="display:block">5</span></span>
+          </span></span>
+        </div>
+      </div>
+
+      <!-- 7 · Still slider -->
+      <div class="layer" id="l-slider" style="width:640px;height:210px">
+        <div class="abs row" style="left:24px;right:24px;top:22px;height:40px;justify-content:space-between">
+          <span style="font-size:25px;font-weight:550">Photo</span>
+          <span id="slider-time" class="gray tnum" style="font-size:23px">Still at 0:00.4</span>
+        </div>
+        <canvas id="strip" class="abs" width="1184" height="200" style="left:24px;top:80px;width:592px;height:100px;border-radius:16px"></canvas>
+        <div id="strip-dim-l" class="abs" style="left:24px;top:80px;height:100px;background:rgba(236,233,228,0.55);border-radius:16px 0 0 16px"></div>
+        <div id="marker" class="abs" style="top:70px;width:0;height:120px">
+          <div class="abs" style="left:-4px;top:0;width:8px;height:120px;border-radius:4px;background:#111;box-shadow:0 0 0 3px #fff"></div>
+        </div>
+      </div>
+
+      <!-- 8 · Toggle -->
+      <div class="layer" id="l-toggle" style="width:440px;height:108px">
+        <div class="abs" style="left:32px;top:24px">
+          <div style="font-size:31px;font-weight:550;line-height:1.1">Autoplay</div>
+          <div class="gray" style="font-size:19px;margin-top:4px">Clips play in the feed</div>
+        </div>
+        <div id="sw-track" class="abs" style="right:30px;top:24px;width:104px;height:60px;border-radius:30px">
+          <div id="sw-knob" class="abs" style="top:6px;height:48px;border-radius:24px;background:#fff;box-shadow:0 2px 6px rgba(20,15,10,0.22)"></div>
+        </div>
+      </div>
+
+      <!-- 9 · Player -->
+      <div class="layer" id="l-player" style="width:640px;height:112px">
+        <div id="pl-btn" class="abs" style="left:18px;top:18px;width:76px;height:76px;border-radius:38px;background:#fff">
+          <span id="pl-play" class="abs" style="left:29px;top:26px" data-icon="play" data-size="24" data-color="#111"></span>
+          <span id="pl-pause" class="abs" style="left:26px;top:26px" data-icon="pause" data-size="24" data-color="#111"></span>
+        </div>
+        <div class="abs" style="left:118px;top:26px;font-size:22px;font-weight:500;color:#fff">Liquid chrome ring</div>
+        <div class="abs" style="left:118px;top:68px;width:356px;height:6px;border-radius:3px;background:rgba(255,255,255,0.24)"></div>
+        <div id="pl-fill" class="abs" style="left:118px;top:68px;height:6px;border-radius:3px;background:#fff"></div>
+        <div id="pl-knob" class="abs" style="top:61px;width:20px;height:20px;border-radius:10px;background:#fff"></div>
+        <div id="pl-time" class="abs tnum" style="right:30px;top:0;line-height:112px;font-size:23px;color:rgba(255,255,255,0.8)">0:00 / 0:04</div>
+      </div>
+
+      <!-- 10 · Loader -->
+      <div class="layer" id="l-loader" style="width:340px;height:96px">
+        <div class="abs row" style="inset:0;justify-content:center;gap:16px;color:#fff;font-size:31px;font-weight:500">
+          <svg id="spin" class="ico" width="34" height="34" viewBox="0 0 34 34">
+            <circle cx="17" cy="17" r="14" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="3.5" />
+            <circle id="spin-arc" cx="17" cy="17" r="14" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" pathLength="100" />
+          </svg>
+          Publishing…
+        </div>
+      </div>
+
+      <!-- 11 · End card -->
+      <div class="layer" id="l-end" style="width:560px;height:580px">
+        <svg id="end-mark" class="abs" style="left:214px;top:92px" width="132" height="132" viewBox="0 0 32 32" fill="none">
+          <path id="end-path" d="M4.5 22.5c2.6-6.4 6.2-11.2 10.9-11.6 3.9-.3 5.6 3.5 3 5.6-2.7 2.2-6.4-.4-4.6-3.8 1.6-3 6.1-4.9 9.9-4.6" stroke="#111" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" pathLength="100" />
+          <circle id="end-dot" cx="26.6" cy="8.2" r="2.8" fill="#c6613f" />
+        </svg>
+        <div id="end-word" class="abs" style="left:0;right:0;top:268px;text-align:center;font-size:68px;font-weight:600;letter-spacing:-0.045em">Claudemotion</div>
+        <div id="end-by" class="abs gray" style="left:0;right:0;top:362px;text-align:center;font-size:31px;font-weight:450">by Convergent</div>
+        <div id="end-url" class="abs gray" style="left:0;right:0;top:476px;text-align:center;font-size:21px">claudemotion-convergent.vercel.app</div>
+      </div>
+
+    </div>
+  </div>
+
+  <svg id="cursor" viewBox="0 0 30 38">
+    <path d="M3 2.2v28.4l7.2-6.9 4.6 10.7 4.9-2.1-4.6-10.5h10.1z" fill="#111" stroke="#fff" stroke-width="2.1" stroke-linejoin="round" />
+  </svg>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   Timeline: 7 bars at the song's tempo, 28 beats, exactly 13 s.
+   Everything below is a pure function of t. No transitions, no timers.
+   ════════════════════════════════════════════════════════════════ */
+const T = 13;
+const BEAT = T / 28;
+const at = (n) => n * BEAT;
+const wrap = (t) => ((t % T) + T) % T;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+
+/** Closed-form step response of a damped spring (0 → 1). */
+function S(dt, f = 2.8, z = 0.84) {
+  if (dt <= 0) return 0;
+  const w = 2 * Math.PI * f;
+  if (z >= 1) return 1 - Math.exp(-w * dt) * (1 + w * dt);
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * dt) * (Math.cos(wd * dt) + ((z * w) / wd) * Math.sin(wd * dt));
+}
+
+/**
+ * A value that changes target many times: the sum of one spring per change.
+ * The previous loop's springs are included so the loop seam is continuous.
+ */
+function track(v0, keys, f = 2.8, z = 0.84) {
+  const ks = keys.slice().sort((a, b) => a[0] - b[0]);
+  const ev = [];
+  let prev = v0;
+  for (const [t, v, ff, zz] of ks) {
+    ev.push([t, v - prev, ff ?? f, zz ?? z]);
+    prev = v;
+  }
+  if (Math.abs(prev - v0) > 1e-6) throw new Error(`track does not loop: ${v0} → ${prev}`);
+  return (t) => {
+    t = wrap(t);
+    let v = v0;
+    for (const [te, d, ff, zz] of ev) v += d * (S(t - te, ff, zz) + S(t + T - te, ff, zz));
+    return v;
+  };
+}
+
+/** Enter/exit envelope for content inside the morphing shape. */
+function envelope(t, tin, tout, inDelay = 0.05) {
+  let best = { a: 0, i: 0, o: 1 };
+  for (const off of [0, T, -T]) {
+    const tt = wrap(t) + off;
+    const i = S(tt - tin - inDelay, 3.1, 1);
+    const o = S(tt - tout, 7.5, 1);
+    const a = Math.max(0, Math.min(i, 1 - o));
+    if (a > best.a) best = { a, i, o };
+  }
+  return best;
+}
+function applyEnv(el, e, { dy = 14, blur = 10 } = {}) {
+  if (e.a < 0.002) {
+    el.style.visibility = "hidden";
+    return;
+  }
+  el.style.visibility = "visible";
+  el.style.opacity = e.a.toFixed(4);
+  const b = (1 - e.i) * blur + e.o * blur * 0.8;
+  el.style.filter = b > 0.05 ? `blur(${b.toFixed(2)}px)` : "none";
+  const y = (1 - e.i) * dy - e.o * dy * 0.7;
+  const s = 1 - (1 - e.i) * 0.02 - e.o * 0.015;
+  el.style.transform = `translateY(${y.toFixed(2)}px) scale(${s.toFixed(4)})`;
+}
+
+/* ── Colours ─────────────────────────────────────────────────── */
+const INK = [17, 17, 17], WHITE = [255, 255, 255], CLAY = [198, 97, 63], HOVER = [44, 42, 40];
+const rgb = (c) => `rgb(${c.map((v) => clamp(Math.round(v), 0, 255)).join(",")})`;
+
+/* ── States: when the shape becomes what ─────────────────────── */
+const M = {
+  palette: at(1), grow: at(3), tabs: at(5), card: at(8), copy: at(10), copied: at(11), toast: at(12),
+  slider: at(14), toggle: at(18), player: at(20), loader: at(23), end: at(24), button: at(27),
+};
+const BOX = {
+  button: [400, 96, 48], palette: [620, 100, 28], paletteFull: [620, 188, 28], tabs: [620, 92, 46],
+  card: [460, 600, 32], copy: [340, 96, 48], toast: [520, 100, 50], slider: [640, 210, 32],
+  toggle: [440, 108, 54], player: [640, 112, 56], loader: [340, 96, 48], end: [560, 580, 44],
+};
+const seq = [
+  [M.palette, "palette", WHITE], [M.grow, "paletteFull", WHITE], [M.tabs, "tabs", WHITE], [M.card, "card", WHITE],
+  [M.copy, "copy", INK], [M.copied, "copy", CLAY], [M.toast, "toast", INK], [M.slider, "slider", WHITE],
+  [M.toggle, "toggle", WHITE], [M.player, "player", INK], [M.loader, "loader", INK], [M.end, "end", WHITE],
+  [M.button, "button", INK],
+];
+const shapeW = track(400, seq.map(([t, k]) => [t, BOX[k][0]]));
+const shapeH = track(96, seq.map(([t, k]) => [t, BOX[k][1]]));
+const shapeR = track(48, seq.map(([t, k]) => [t, BOX[k][2]]));
+const colKeys = (ch) => {
+  const ks = seq.map(([t, , c]) => [t, c[ch], 3.4, 1]);
+  ks.push([at(0) + 0.02, HOVER[ch], 4, 1], [at(1) - 0.06, INK[ch], 6, 1]); // hover on the first button
+  return ks;
+};
+const shapeC = [0, 1, 2].map((ch) => track(INK[ch], colKeys(ch)));
+const arrowX = track(0, [[at(0) + 0.02, 6, 3.2, 0.9], [at(1) - 0.06, 0, 5, 1]]); // hover nudge
+
+/* Camera: each state fills the frame. Trails the shape a little. */
+const camFor = (k) => Math.min((0.86 * 1080) / BOX[k][0], (0.62 * 1920) / BOX[k][1], 2.3);
+const camera = track(camFor("button"), seq.map(([t, k]) => [t + 0.03, camFor(k)]), 1.7, 0.9);
+
+/* Presses: the shape dips a little under the cursor. */
+const CLICKS = [at(1), at(6), at(7), at(11), at(19), at(21)];
+const HOLDS = [[at(15), at(17.5)], [at(22), at(22.75)]];
+const shapePress = track(1, [
+  [at(1) - 0.09, 0.965, 6, 0.9], [at(1), 1, 5, 0.86],
+  [at(11) - 0.09, 0.965, 6, 0.9], [at(11), 1, 5, 0.86],
+]);
+
+/* ── Cursor (world coordinates, shape centre = 0,0) ──────────── */
+const TAB_SEG = [[-302, -100.7], [-100.7, 100.7], [100.7, 302]];
+const segMid = (i) => (TAB_SEG[i][0] + TAB_SEG[i][1]) / 2;
+const STRIP_L = -296, STRIP_W = 592; // slider film strip, relative to shape centre
+const SV0 = 0.1; // slider value at rest
+const PL_L = -320 + 118, PL_W = 356; // player progress bar
+const HOME = [64, 26];
+const cursorKeys = [
+  [at(1) + 0.08, [250, 150]],                         // out of the way while typing
+  [at(5) + 0.02, [segMid(1) + 12, 14], 2.3, 0.92],    // to "Latest"
+  [at(6) + 0.04, [segMid(2) + 10, 14], 2.3, 0.92],    // to "Most copied"
+  [at(8) + 0.04, [96, 60], 2.0, 0.92],                // onto the clip
+  [at(10) + 0.03, [26, 22], 2.4, 0.92],               // onto Copy prompt
+  [at(12) + 0.06, [240, 120], 2.0, 0.92],             // aside during the toast
+  [at(14) + 0.02, [STRIP_L + SV0 * STRIP_W, -10], 2.4, 0.95], // to the still marker
+  [at(16), [STRIP_L + 0.33 * STRIP_W, -4], 3.0, 0.95],          // drag
+  [at(17), [STRIP_L + 0.665 * STRIP_W, -8], 3.0, 0.95],         // drag further
+  [at(18) + 0.02, [440 / 2 - 30 - 52 + 10, 6], 2.4, 0.92],      // to the switch
+  [at(20) + 0.02, [-320 + 18 + 38 + 6, 8], 2.4, 0.92],          // to play
+  [at(21) + 0.12, [PL_L + (at(22) - at(21)) / 4 * PL_W, 10], 2.6, 0.95], // to the progress knob
+  [at(22) + 0.02, [PL_L + 0.64 * PL_W, 12], 3.0, 0.95],         // scrub
+  [at(23) + 0.06, [230, 140], 2.0, 0.92],             // aside
+  [at(24) + 0.04, [170, 350], 1.8, 0.92],             // below the end card
+  [at(27) + 0.06, HOME, 1.8, 0.92],                   // back to the button
+];
+const curX = track(HOME[0], cursorKeys.map(([t, p, f, z]) => [t, p[0], f ?? 1.9, z ?? 0.92]));
+const curY = track(HOME[1], cursorKeys.map(([t, p, f, z]) => [t, p[1], f ?? 1.9, z ?? 0.92]));
+const pressKeys = [];
+for (const c of CLICKS) pressKeys.push([c - 0.09, 0.84, 7, 0.9], [c, 1, 5, 0.86]);
+for (const [a, b] of HOLDS) pressKeys.push([a - 0.06, 0.84, 7, 0.9], [b, 1, 5, 0.86]);
+const cursorPress = track(1, pressKeys);
+
+/* ── Tabs: the two edges ride different springs ───────────────── */
+const FAST = [3.6, 0.86], SLOW = [2.1, 0.92];
+const tabL = track(TAB_SEG[0][0], [
+  [at(6), TAB_SEG[1][0], ...SLOW], [at(7), TAB_SEG[2][0], ...SLOW], [at(12), TAB_SEG[0][0], 4, 1],
+]);
+const tabR = track(TAB_SEG[0][1], [
+  [at(6), TAB_SEG[1][1], ...FAST], [at(7), TAB_SEG[2][1], ...FAST], [at(12), TAB_SEG[0][1], 4, 1],
+]);
+
+/* ── Toggle knob: same trick ──────────────────────────────────── */
+const knobL = track(6, [[at(19), 50, ...SLOW], [at(23), 6, 4, 1]]);
+const knobR = track(54, [[at(19), 98, ...FAST], [at(23), 54, 4, 1]]);
+const GRAYTRACK = [218, 214, 207];
+const swC = [0, 1, 2].map((ch) => track(GRAYTRACK[ch], [[at(19), CLAY[ch], 4, 1], [at(23), GRAYTRACK[ch], 4, 1]]));
+
+/* ── Counter roll 1,204 → 1,205 ───────────────────────────────── */
+const digit = track(0, [[at(13), 1, 3.2, 0.86], [at(16), 0, 4, 1]]);
+
+/* ── Slider: direct manipulation while held ───────────────────── */
+const [GRAB, REL] = HOLDS[0];
+const markerX0 = STRIP_L + SV0 * STRIP_W;
+const grabOffset = curX(GRAB) - markerX0;
+const SNAPS = Array.from({ length: 8 }, (_, i) => (i + 0.5) / 8);
+function sliderValue(t) {
+  t = wrap(t);
+  if (t < GRAB) return SV0;
+  const fromCursor = (tt) => clamp((curX(tt) - grabOffset - STRIP_L) / STRIP_W, 0, 1);
+  if (t <= REL) return fromCursor(t);
+  const vr = fromCursor(REL);
+  const snap = SNAPS.reduce((a, b) => (Math.abs(b - vr) < Math.abs(a - vr) ? b : a));
+  const back = snap + (vr - snap) * (1 - S(t - REL, 3.4, 0.86));
+  // Quietly reset once the slider is gone, so the next loop starts at rest.
+  return t > M.player ? lerp(back, SV0, S(t - M.player, 4, 1)) : back;
+}
+
+/* ── Player: plays, scrubs, keeps playing ─────────────────────── */
+const PLAY = at(21), [SGRAB, SREL] = HOLDS[1], CLIP = 4;
+const knobX0 = (t) => PL_L + ((t - PLAY) / CLIP) * PL_W;
+const scrubOffset = curX(SGRAB) - knobX0(SGRAB);
+function progress(t) {
+  t = wrap(t);
+  if (t < PLAY) return 0;
+  if (t < SGRAB) return (t - PLAY) / CLIP;
+  const fromCursor = (tt) => clamp((curX(tt) - scrubOffset - PL_L) / PL_W, 0, 1);
+  if (t <= SREL) return fromCursor(t);
+  return clamp(fromCursor(SREL) + (t - SREL) / CLIP, 0, 1);
+}
+
+/* ── Typing ───────────────────────────────────────────────────── */
+const WORD = "chrome";
+const KEY_TIMES = Array.from({ length: WORD.length }, (_, i) => at(2) + (i * BEAT) / 4);
+
+/* ════════════════════════════════════════════════════════════════
+   Assets and DOM
+   ════════════════════════════════════════════════════════════════ */
+const $ = (id) => document.getElementById(id);
+const ICONS = {
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/>',
+  copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+};
+const FILLED = {
+  play: '<path d="M8 5.2v13.6a1 1 0 0 0 1.5.86l10.6-6.8a1 1 0 0 0 0-1.72L9.5 4.34A1 1 0 0 0 8 5.2Z"/>',
+  pause: '<rect x="6" y="4.5" width="4.5" height="15" rx="1.4"/><rect x="13.5" y="4.5" width="4.5" height="15" rx="1.4"/>',
+};
+// Every line icon renders with the same 2.4 px stroke, whatever its size.
+for (const el of document.querySelectorAll("[data-icon]")) {
+  const name = el.dataset.icon, size = +el.dataset.size, color = el.dataset.color || "#fff";
+  const sw = (2.4 * 24) / size;
+  el.innerHTML = ICONS[name]
+    ? `<svg class="ico" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]}</svg>`
+    : `<svg class="ico" width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">${FILLED[name]}</svg>`;
+  el.style.display = "inline-block";
+}
+for (const set of document.querySelectorAll(".tabset")) {
+  set.style.fontSize = "27px";
+  set.style.fontWeight = "500";
+  [...set.children].forEach((s, i) => {
+    s.style.position = "absolute";
+    s.style.left = `${TAB_SEG[i][0] + 310}px`;
+    s.style.width = `${TAB_SEG[i][1] - TAB_SEG[i][0]}px`;
+    s.style.textAlign = "center";
+  });
+}
+
+const ASSETS = __ASSETS__;
+const loadImg = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+let FRAMES = [], STILL = null;
+const cardCtx = $("card-media").getContext("2d");
+
+async function init() {
+  [STILL, ...FRAMES] = await Promise.all([loadImg(ASSETS.still), ...ASSETS.frames.map(loadImg)]);
+  await Promise.all([STILL, ...FRAMES].map((i) => i.decode()));
+  // Palette thumbnail: centre square of the still.
+  const tc = $("pal-thumb").getContext("2d");
+  const s = Math.min(STILL.width, STILL.height);
+  tc.drawImage(STILL, (STILL.width - s) / 2, (STILL.height - s) / 2, s, s, 0, 0, 120, 120);
+  // Film strip: eight frames from the clip.
+  const sc = $("strip").getContext("2d");
+  for (let i = 0; i < 8; i++) {
+    const f = FRAMES[Math.round(((i + 0.5) / 8) * (FRAMES.length - 1))];
+    const cw = (f.height * 148) / 200;
+    sc.drawImage(f, (f.width - cw) / 2, 0, cw, f.height, i * 148, 0, 148, 200);
+  }
+  await document.fonts.ready;
+  window.__ready = true;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   seek(t): sets every style from time alone
+   ════════════════════════════════════════════════════════════════ */
+const LAYERS = {
+  button: [M.button, M.palette + T, "center"], palette: [M.palette, M.tabs, "top"], tabs: [M.tabs, M.card, "center"],
+  card: [M.card, M.copy, "center"], copy: [M.copy, M.toast, "center"], toast: [M.toast, M.slider, "center"],
+  slider: [M.slider, M.toggle, "center"], toggle: [M.toggle, M.player, "center"], player: [M.player, M.loader, "center"],
+  loader: [M.loader, M.end, "center"], end: [M.end, M.button, "center"],
+};
+let lastFrame = -2; // forces the first draw
+
+function seek(tRaw) {
+  const t = wrap(tRaw);
+  const w = shapeW(t), h = shapeH(t), r = shapeR(t);
+  const cam = camera(t);
+
+  $("world").style.transform = `scale(${cam.toFixed(5)})`;
+  const shape = $("shape");
+  shape.style.width = `${w.toFixed(2)}px`;
+  shape.style.height = `${h.toFixed(2)}px`;
+  shape.style.left = `${(-w / 2).toFixed(2)}px`;
+  shape.style.top = `${(-h / 2).toFixed(2)}px`;
+  shape.style.borderRadius = `${Math.min(r, h / 2, w / 2).toFixed(2)}px`;
+  shape.style.background = rgb(shapeC.map((f) => f(t)));
+  shape.style.transform = `scale(${shapePress(t).toFixed(4)})`;
+
+  for (const [name, [tin, tout, anchor]] of Object.entries(LAYERS)) {
+    const el = $(`l-${name}`);
+    const lw = parseFloat(el.style.width), lh = parseFloat(el.style.height);
+    el.style.left = `${((w - lw) / 2).toFixed(2)}px`;
+    el.style.top = anchor === "top" ? "0px" : `${((h - lh) / 2).toFixed(2)}px`;
+    applyEnv(el, envelope(t, tin, tout));
+  }
+
+  /* Button hover: the arrow leans forward. */
+  $("btn-arrow").style.transform = `translateX(${arrowX(t).toFixed(2)}px)`;
+
+  /* Palette typing and result row */
+  const typed = KEY_TIMES.filter((k) => t >= k).length;
+  $("pal-text").textContent = WORD.slice(0, typed);
+  $("pal-ph").style.display = typed ? "none" : "inline";
+  $("pal-caret").style.display = typed ? "block" : "none";
+  $("pal-caret").style.left = `${48 + $("pal-text").offsetWidth + 4}px`;
+  $("pal-caret").style.top = "32px";
+  applyEnv($("pal-row"), envelope(t, M.grow, M.tabs, 0.02), { dy: 10, blur: 8 });
+  const hl = S(t - at(4), 4, 1);
+  $("pal-hl").style.opacity = hl.toFixed(3);
+
+  /* Tabs: indicator edges and the white labels clipped to it */
+  const L = tabL(t), R = tabR(t);
+  $("tab-ind").style.left = `${(L + 310 + 8).toFixed(2)}px`;
+  $("tab-ind").style.width = `${(R - L - 16).toFixed(2)}px`;
+  $("tab-on").style.clipPath = `inset(8px ${(620 - (R + 310) + 8).toFixed(2)}px 8px ${(L + 310 + 8).toFixed(2)}px round 38px)`;
+
+  /* Card: still until hovered, then the clip plays */
+  const playing = t >= at(9) && t < M.copy + 0.3;
+  const frame = playing ? Math.floor((t - at(9)) * 24) % FRAMES.length : -1;
+  if (frame !== lastFrame) {
+    cardCtx.drawImage(frame < 0 ? STILL : FRAMES[frame], 0, 0, 864, 900);
+    lastFrame = frame;
+  }
+  const badge = envelope(t, M.card, at(9), 0.12);
+  applyEnv($("card-badge"), badge, { dy: 6, blur: 6 });
+
+  /* Copy → Copied */
+  applyEnv($("copy-a"), envelope(t, M.copy, M.copied, 0));
+  applyEnv($("copy-b"), envelope(t, M.copied, M.toast, 0));
+
+  /* Toast counter */
+  $("toast-digits").style.transform = `translateY(${(-36 * digit(t)).toFixed(2)}px)`;
+
+  /* Slider */
+  const sv = sliderValue(t);
+  const mx = STRIP_L + sv * STRIP_W + 320;
+  $("marker").style.left = `${mx.toFixed(2)}px`;
+  $("strip-dim-l").style.width = `${Math.max(0, mx - 24).toFixed(2)}px`;
+  $("strip-dim-l").style.borderRadius = "16px 0 0 16px";
+  const secs = sv * CLIP;
+  $("slider-time").textContent = `Still at 0:0${secs.toFixed(1)}`;
+
+  /* Toggle */
+  const kl = knobL(t), kr = knobR(t);
+  $("sw-knob").style.left = `${kl.toFixed(2)}px`;
+  $("sw-knob").style.width = `${(kr - kl).toFixed(2)}px`;
+  $("sw-track").style.background = rgb(swC.map((f) => f(t)));
+
+  /* Player */
+  const p = progress(t);
+  $("pl-fill").style.width = `${(p * PL_W).toFixed(2)}px`;
+  $("pl-knob").style.left = `${(118 + p * PL_W - 10).toFixed(2)}px`;
+  const ps = Math.floor(p * CLIP);
+  $("pl-time").textContent = `0:0${ps} / 0:04`;
+  applyEnv($("pl-play"), envelope(t, M.player - 1, PLAY, 0), { dy: 0, blur: 6 });
+  applyEnv($("pl-pause"), envelope(t, PLAY, M.loader + 0.4, 0), { dy: 0, blur: 6 });
+  const btnPress = 1 - 0.08 * (S(t - (PLAY - 0.09), 7, 0.9) - S(t - PLAY, 5, 0.86));
+  $("pl-btn").style.transform = `scale(${btnPress.toFixed(4)})`;
+
+  /* Loader spinner */
+  const lt = t - M.loader;
+  $("spin").style.transform = `rotate(${(lt * 400).toFixed(1)}deg)`;
+  $("spin-arc").setAttribute("stroke-dasharray", `${(30 + 22 * Math.sin(lt * 5)).toFixed(2)} 100`);
+
+  /* End card: the mark draws, then the words, then the dot lands */
+  const draw = S(t - M.end - 0.05, 1.6, 1);
+  $("end-path").setAttribute("stroke-dasharray", `${(draw * 100).toFixed(2)} 100`);
+  const dot = S(t - at(26), 3, 0.84);
+  $("end-dot").style.transform = `translateY(${(-6 * (1 - dot)).toFixed(3)}px)`;
+  $("end-dot").style.opacity = Math.min(1, dot * 2).toFixed(3);
+  applyEnv($("end-word"), envelope(t, M.end, M.button, 0.08), { dy: 16, blur: 10 });
+  applyEnv($("end-by"), envelope(t, at(25), M.button, 0), { dy: 12, blur: 8 });
+  applyEnv($("end-url"), envelope(t, at(26), M.button, 0.06), { dy: 10, blur: 6 });
+
+  /* Cursor: world position through the camera, drawn in screen space */
+  const cx = 540 + curX(t) * cam, cy = 900 + curY(t) * cam;
+  $("cursor").style.transform = `translate(${(cx - 6).toFixed(2)}px, ${(cy - 4).toFixed(2)}px) scale(${cursorPress(t).toFixed(4)})`;
+}
+
+window.seek = seek;
+window.TIMELINE = { T, BEAT, M, CLICKS, HOLDS, KEY_TIMES };
+init().then(() => seek(0));
+</script>
+</body>
+</html>

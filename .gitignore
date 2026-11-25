@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# intro video: build output and renders (the soundtrack is not ours to publish)
+/intro/dist
+/intro/out
